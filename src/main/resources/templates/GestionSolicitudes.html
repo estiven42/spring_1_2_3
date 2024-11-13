@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Solicitudes</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        nav {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-info {
+            background-color: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Gestión de Solicitudes
+</header>
+
+<nav>
+    <ul>
+        <li><a href="MenuEmpleado.html">Inicio</a></li>
+        <li><a href="GestionSolicitudes.html">Gestión de solicitudes</a></li>
+        <li><a href="HistorialDesiciones.html">Historial de decisiones</a></li>
+        <li><a href="Informes.html">Informes</a></li>
+        <li><a href="cerrar_sesion.html">Cerrar Sesión</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h2>Solicitudes de Clientes</h2>
+    <table id="solicitudes-table">
+        <tr>
+            <th>Nombre del Cliente</th>
+            <th>Correo Electrónico</th>
+            <th>Fecha de Solicitud</th>
+            <th>Acciones</th>
+        </tr>
+        <!-- Los datos se cargarán aquí mediante JavaScript -->
+    </table>
+</main>
+
+<footer>
+    &copy; 2024 [Nombre de tu Compañía]. Todos los derechos reservados.
+</footer>
+
+<script>
+    // Ejemplo de datos que podrías obtener de la base de datos
+    const solicitudes = [
+        {
+            nombre: 'Juan Pérez',
+            correo: 'juan.perez@example.com',
+            fecha: '2024-11-15',
+        },
+        {
+            nombre: 'Ana Rodríguez',
+            correo: 'ana.rodriguez@example.com',
+            fecha: '2024-11-14',
+        },
+        {
+            nombre: 'María Gómez',
+            correo: 'maria.gomez@example.com',
+            fecha: '2024-11-13',
+        },
+        {
+            nombre: 'Pedro Sánchez',
+            correo: 'pedro.sanchez@example.com',
+            fecha: '2024-11-12',
+        }
+    ];
+
+    // Función para cargar los datos en la tabla
+    function cargarSolicitudes() {
+        const table = document.getElementById("solicitudes-table");
+        solicitudes.forEach(solicitud => {
+            const row = document.createElement("tr");
+
+            const cellNombre = document.createElement("td");
+            cellNombre.textContent = solicitud.nombre;
+            row.appendChild(cellNombre);
+
+            const cellCorreo = document.createElement("td");
+            cellCorreo.textContent = solicitud.correo;
+            row.appendChild(cellCorreo);
+
+            const cellFecha = document.createElement("td");
+            cellFecha.textContent = solicitud.fecha;
+            row.appendChild(cellFecha);
+
+            const cellAcciones = document.createElement("td");
+
+            // Botón Aprobar
+            const btnAprobar = document.createElement("button");
+            btnAprobar.textContent = "Aprobar";
+            btnAprobar.classList.add("btn");
+            cellAcciones.appendChild(btnAprobar);
+
+            // Botón Rechazar
+            const btnRechazar = document.createElement("button");
+            btnRechazar.textContent = "Rechazar";
+            btnRechazar.classList.add("btn", "btn-danger");
+            cellAcciones.appendChild(btnRechazar);
+
+            // Botón Ver Información
+            const btnVerInfo = document.createElement("button");
+            btnVerInfo.textContent = "Ver Información";
+            btnVerInfo.classList.add("btn", "btn-info");
+            cellAcciones.appendChild(btnVerInfo);
+
+            row.appendChild(cellAcciones);
+            table.appendChild(row);
+        });
+    }
+
+    // Cargar las solicitudes al cargar la página
+    window.onload = cargarSolicitudes;
+</script>
+
+</body>
+</html>

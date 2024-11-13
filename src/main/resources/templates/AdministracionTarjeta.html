@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Tarjeta - Banco Virtual</title>
+    <style>
+        /* Tipografía y colores */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Estilo del encabezado */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        /* Barra de navegación */
+        nav {
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Contenido principal */
+        main {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .card-container {
+            background-color: #ffffff;
+            border: 2px solid #007bff;
+            border-radius: 15px;
+            padding: 30px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-container h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #007bff;
+        }
+
+        .card-container p {
+            font-size: 1.2rem;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        /* Estilo de la tarjeta */
+        .credit-card {
+            background-color: #007bff;
+            color: white;
+            width: 300px;
+            height: 180px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px auto 0;
+            transition: transform 0.3s ease;
+        }
+
+        .credit-card:hover {
+            transform: scale(1.05);
+        }
+
+        .credit-card .bank-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .credit-card .card-number {
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin: 15px 0;
+        }
+
+        .credit-card .button-container {
+            text-align: center;
+        }
+
+        .credit-card button {
+            padding: 10px 20px;
+            background-color: white;
+            color: #007bff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .credit-card button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        /* Estilo del pie de página */
+        footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    Bienvenido a Su Banco Virtual
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#" th:href="@{/AdministracionTarjeta}">Inicio</a></li>
+        <li><a href="#" th:href="@{/AdministracionTarjeta}">Administración de Tarjeta</a></li>
+        <li><a href="#" th:href="@{/CerrarSesion}">Cerrar Sesión</a></li>
+    </ul>
+</nav>
+
+<main>
+    <div class="card-container">
+        <h2>Dando Card</h2>
+        <p>Tarjeta de crédito</p>
+        <p>Aún no posees una tarjeta de crédito</p>
+
+        <!-- Simulación de tarjeta de crédito -->
+        <div class="credit-card">
+            <div class="bank-name">Banco Virtual</div>
+            <div class="card-number">**** **** **** 1234</div>
+            <div class="button-container">
+                <button onclick="location.href='/SolicitarTarjeta'">Adquiere tu tarjeta</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer>
+    © 2024 Banco Virtual. Todos los derechos reservados.
+</footer>
+
+</body>
+</html>
