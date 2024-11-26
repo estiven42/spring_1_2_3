@@ -40,26 +40,21 @@ public class SolicitudTarjetaControlador {
     public ResponseEntity<?> procesarSolicitud(@ModelAttribute SolicitudTarjeta solicitud,
                                                @RequestParam("archivo") MultipartFile archivo) {
         try {
-            // Validar campos
             validarCampos(solicitud, archivo);
 
-            // Guardar el archivo PDF si se proporcionó uno
             if (!archivo.isEmpty()) {
                 String rutaArchivo = guardarArchivo(archivo);
                 solicitud.setDocumentoIdentidad(rutaArchivo);
             }
 
-            // Establecer estado inicial
-            solicitud.setEstado("Pendiente");
-
-            // Guardar la solicitud en la base de datos
             solicitudTarjetaServicio.crearSolicitud(solicitud);
 
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok("Solicitud procesada exitosamente");
 
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error en datos: " + e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body("Error al procesar la solicitud: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
         }
     }
 
@@ -100,20 +95,15 @@ public class SolicitudTarjetaControlador {
     }
 
     private String guardarArchivo(MultipartFile archivo) throws IOException {
-        // Crear el directorio si no existe
         File directorio = new File(rutaDocumento);
-        if (!directorio.exists()) {
-            directorio.mkdirs();
+        if (!directorio.exists() && !directorio.mkdirs()) {
+            throw new IOException("No se pudo crear el directorio: " + rutaDocumento);
         }
 
-        // Generar nombre único para el archivo
         String nombreArchivo = System.currentTimeMillis() + "_" + archivo.getOriginalFilename();
-        String rutaArchivo = rutaDocumento + File.separator + nombreArchivo;
+        File destino = new File(directorio, nombreArchivo);
 
-        // Guardar el archivo
-        File file = new File(rutaArchivo);
-        archivo.transferTo(file);
-
-        return rutaArchivo;
+        archivo.transferTo(destino);
+        return destino.getAbsolutePath();
     }
 }

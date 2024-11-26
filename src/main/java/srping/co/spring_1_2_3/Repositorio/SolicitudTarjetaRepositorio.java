@@ -10,6 +10,5 @@ import java.util.List;
 public interface SolicitudTarjetaRepositorio extends JpaRepository<SolicitudTarjeta, Long> {
     List<SolicitudTarjeta> findByEstado(String estado);
 
-    // Método adicional para buscar por cédula
     SolicitudTarjeta findByCedula(String cedula);
 }

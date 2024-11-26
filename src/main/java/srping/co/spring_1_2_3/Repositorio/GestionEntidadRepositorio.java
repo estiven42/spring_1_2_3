@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface GestionEntidadRepositorio extends JpaRepository<GestionEntidad, Long> {
-    List<GestionEntidad> findByEstado(GestionEntidad.EstadoSolicitud estado);
+    List<GestionEntidad> findByEstado(EstadoSolicitud estado);
 }

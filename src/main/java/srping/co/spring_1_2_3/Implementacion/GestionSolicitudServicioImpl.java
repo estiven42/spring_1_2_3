@@ -42,7 +42,6 @@ public class GestionSolicitudServicioImpl implements GestionSolicitudServicio {
         return actualizarEstadoSolicitud(id, GestionEntidad.EstadoSolicitud.RECHAZADA);
     }
 
-    // Método común para aprobar/rechazar
     private GestionEntidad actualizarEstadoSolicitud(Long id, GestionEntidad.EstadoSolicitud estado) {
         if (id == null) {
             throw new IllegalArgumentException("El ID de la solicitud no puede ser nulo.");
@@ -51,12 +50,12 @@ public class GestionSolicitudServicioImpl implements GestionSolicitudServicio {
         Optional<GestionEntidad> solicitud = gestionEntidadRepositorio.findById(id);
         if (solicitud.isPresent()) {
             GestionEntidad solicitudEntidad = solicitud.get();
-            // Verificación adicional para evitar cambiar el estado de una solicitud ya procesada
-            if (solicitudEntidad.getEstado() != GestionEntidad.EstadoSolicitud.PENDIENTE) {
+            if (solicitudEntidad.getEstado() == GestionEntidad.EstadoSolicitud.APROBADA ||
+                    solicitudEntidad.getEstado() == GestionEntidad.EstadoSolicitud.RECHAZADA) {
                 throw new RuntimeException("La solicitud ya ha sido procesada.");
             }
 
-            solicitudEntidad.setEstado(estado); // Usando el enum directamente
+            solicitudEntidad.setEstado(estado);
             return gestionEntidadRepositorio.save(solicitudEntidad);
         } else {
             throw new RuntimeException("Solicitud no encontrada para el ID: " + id);

@@ -15,41 +15,37 @@ public class GestionSolicitudControlador {
     @Autowired
     private GestionSolicitudServicio gestionSolicitudServicio;
 
-    // Mostrar la página principal de gestión de solicitudes
     @GetMapping("/GestionSolicitudes")
     public String mostrarGestion(Model model) {
         model.addAttribute("mensaje", "Bienvenido a la administración de solicitudes.");
-        return "GestionSolicitudes"; // Asegúrate de tener esta vista en el directorio de plantillas
+        return "GestionSolicitudes";
     }
 
-    // Ruta para obtener solicitudes por estado
     @PostMapping("/estado/{estado}")
     public String obtenerSolicitudesPorEstado(@PathVariable String estado, Model model) {
         try {
             GestionEntidad.EstadoSolicitud estadoSolicitud = GestionEntidad.EstadoSolicitud.valueOf(estado.toUpperCase());
             List<GestionEntidad> solicitudes = gestionSolicitudServicio.obtenerSolicitudesPorEstado(estadoSolicitud);
             model.addAttribute("solicitudes", solicitudes);
-            return "GestionSolicitudes"; // Devuelve a la misma vista con la lista de solicitudes
+            return "GestionSolicitudes";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", "Estado no válido.");
             return "GestionSolicitudes";
         }
     }
 
-    // Ruta para obtener solicitud por ID
     @PostMapping("/solicitud/{id}")
     public String obtenerSolicitudPorId(@PathVariable Long id, Model model) {
         try {
             GestionEntidad solicitud = gestionSolicitudServicio.obtenerSolicitudPorId(id);
             model.addAttribute("solicitud", solicitud);
-            return "DetalleSolicitud"; // Devuelve a una vista de detalle de solicitud
+            return "DetalleSolicitud";
         } catch (RuntimeException e) {
             model.addAttribute("error", "Solicitud no encontrada.");
             return "GestionSolicitudes";
         }
     }
 
-    // Ruta para aprobar solicitud
     @PostMapping("/aprobar/{id}")
     public String aprobarSolicitud(@PathVariable Long id, Model model) {
         try {
@@ -63,7 +59,6 @@ public class GestionSolicitudControlador {
         }
     }
 
-    // Ruta para rechazar solicitud
     @PostMapping("/rechazar/{id}")
     public String rechazarSolicitud(@PathVariable Long id, Model model) {
         try {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,59 +14,50 @@
             line-height: 1.6;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         header {
             background-color: #007bff;
             color: white;
-            padding: 10px 0;
             text-align: center;
-            font-size: 1.5rem;
+            padding: 15px 0;
         }
 
-        nav {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-        }
-
-        nav ul {
-            list-style-type: none;
-            padding: 0;
+        .filtros {
             display: flex;
             justify-content: center;
+            margin-bottom: 20px;
         }
 
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
+        .btn {
+            padding: 10px 15px;
+            margin: 0 10px;
+            background-color: #007bff;
             color: white;
-            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        nav ul li a:hover {
-            text-decoration: underline;
-        }
-
-        main {
-            padding: 20px;
-            margin: 0 auto;
-            max-width: 1200px;
+        .btn:hover {
+            background-color: #0056b3;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            text-align: left;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         th, td {
+            border: 1px solid #ddd;
             padding: 12px;
+            text-align: left;
         }
 
         th {
@@ -74,155 +65,129 @@
             color: white;
         }
 
-        td {
-            background-color: #f9f9f9;
+        .actions {
+            display: flex;
+            justify-content: center;
         }
 
-        .btn {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .actions button {
             margin: 0 5px;
         }
 
-        .btn:hover {
-            background-color: #0056b3;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-        }
-
-        .btn-danger:hover {
-            background-color: #c82333;
-        }
-
-        .btn-info {
-            background-color: #17a2b8;
-        }
-
-        .btn-info:hover {
-            background-color: #138496;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
+        .mensaje {
             text-align: center;
             padding: 10px;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
+            background-color: #d4edda;
+            color: #155724;
+            margin-bottom: 15px;
+        }
+
+        .error {
+            text-align: center;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
-
 <header>
-    Gestión de Solicitudes
+    <h1>Gestión de Solicitudes</h1>
 </header>
 
-<nav>
-    <ul>
-        <li><a href="MenuEmpleado.html">Inicio</a></li>
-        <li><a href="GestionSolicitudes.html">Gestión de solicitudes</a></li>
-        <li><a href="HistorialDesiciones.html">Historial de decisiones</a></li>
-        <li><a href="Informes.html">Informes</a></li>
-        <li><a href="cerrar_sesion.html">Cerrar Sesión</a></li>
-    </ul>
-</nav>
+<div class="container">
+    <!-- Filtros de estado -->
+    <div class="filtros">
+        <button class="btn" onclick="filtrarSolicitudes('PENDIENTE')">Solicitudes Pendientes</button>
+        <button class="btn" onclick="filtrarSolicitudes('APROBADA')">Solicitudes Aprobadas</button>
+        <button class="btn" onclick="filtrarSolicitudes('RECHAZADA')">Solicitudes Rechazadas</button>
+    </div>
 
-<main>
-    <h2>Solicitudes de Clientes</h2>
-    <table id="solicitudes-table">
+    <!-- Mensajes de resultado -->
+    <div th:if="${mensaje}" class="mensaje" th:text="${mensaje}"></div>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <!-- Tabla de solicitudes -->
+    <table>
+        <thead>
         <tr>
-            <th>Nombre del Cliente</th>
+            <th>ID</th>
+            <th>Nombre Cliente</th>
             <th>Correo Electrónico</th>
-            <th>Fecha de Solicitud</th>
+            <th>Fecha Solicitud</th>
+            <th>Estado</th>
             <th>Acciones</th>
         </tr>
-        <!-- Los datos se cargarán aquí mediante JavaScript -->
+        </thead>
+        <tbody id="solicitudesBody">
+        <!-- Filas se llenarán dinámicamente -->
+        <tr th:each="solicitud : ${solicitudes}">
+            <td th:text="${solicitud.id}"></td>
+            <td th:text="${solicitud.nombreCliente}"></td>
+            <td th:text="${solicitud.correoElectronico}"></td>
+            <td th:text="${#temporals.format(solicitud.fechaSolicitud, 'dd/MM/yyyy')}"></td>
+            <td th:text="${solicitud.estado}"></td>
+            <td class="actions">
+                <button onclick="verDetalle(/*[[${solicitud.id}]]*/)">Ver Detalle</button>
+                <button th:if="${solicitud.estado == 'PENDIENTE'}"
+                        onclick="aprobarSolicitud(/*[[${solicitud.id}]]*/)">Aprobar</button>
+                <button th:if="${solicitud.estado == 'PENDIENTE'}"
+                        onclick="rechazarSolicitud(/*[[${solicitud.id}]]*/)">Rechazar</button>
+            </td>
+        </tr>
+        </tbody>
     </table>
-</main>
+</div>
 
-<footer>
-    &copy; 2024 [Nombre de tu Compañía]. Todos los derechos reservados.
-</footer>
+<!-- Modal para detalles de solicitud -->
+<div id="detalleModal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+    <div style="background: white; width: 500px; margin: 100px auto; padding: 20px; border-radius: 5px;">
+        <h2>Detalles de Solicitud</h2>
+        <div id="detalleContenido"></div>
+        <button onclick="cerrarModal()">Cerrar</button>
+    </div>
+</div>
 
 <script>
-    // Ejemplo de datos que podrías obtener de la base de datos
-    const solicitudes = [
-        {
-            nombre: 'Juan Pérez',
-            correo: 'juan.perez@example.com',
-            fecha: '2024-11-15',
-        },
-        {
-            nombre: 'Ana Rodríguez',
-            correo: 'ana.rodriguez@example.com',
-            fecha: '2024-11-14',
-        },
-        {
-            nombre: 'María Gómez',
-            correo: 'maria.gomez@example.com',
-            fecha: '2024-11-13',
-        },
-        {
-            nombre: 'Pedro Sánchez',
-            correo: 'pedro.sanchez@example.com',
-            fecha: '2024-11-12',
-        }
-    ];
-
-    // Función para cargar los datos en la tabla
-    function cargarSolicitudes() {
-        const table = document.getElementById("solicitudes-table");
-        solicitudes.forEach(solicitud => {
-            const row = document.createElement("tr");
-
-            const cellNombre = document.createElement("td");
-            cellNombre.textContent = solicitud.nombre;
-            row.appendChild(cellNombre);
-
-            const cellCorreo = document.createElement("td");
-            cellCorreo.textContent = solicitud.correo;
-            row.appendChild(cellCorreo);
-
-            const cellFecha = document.createElement("td");
-            cellFecha.textContent = solicitud.fecha;
-            row.appendChild(cellFecha);
-
-            const cellAcciones = document.createElement("td");
-
-            // Botón Aprobar
-            const btnAprobar = document.createElement("button");
-            btnAprobar.textContent = "Aprobar";
-            btnAprobar.classList.add("btn");
-            cellAcciones.appendChild(btnAprobar);
-
-            // Botón Rechazar
-            const btnRechazar = document.createElement("button");
-            btnRechazar.textContent = "Rechazar";
-            btnRechazar.classList.add("btn", "btn-danger");
-            cellAcciones.appendChild(btnRechazar);
-
-            // Botón Ver Información
-            const btnVerInfo = document.createElement("button");
-            btnVerInfo.textContent = "Ver Información";
-            btnVerInfo.classList.add("btn", "btn-info");
-            cellAcciones.appendChild(btnVerInfo);
-
-            row.appendChild(cellAcciones);
-            table.appendChild(row);
-        });
+    function filtrarSolicitudes(estado) {
+        fetch(`/estado/${estado}`, { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                // Actualizar contenido de la tabla
+                document.getElementById('solicitudesBody').innerHTML = html;
+            });
     }
 
-    // Cargar las solicitudes al cargar la página
-    window.onload = cargarSolicitudes;
-</script>
+    function verDetalle(id) {
+        fetch(`/solicitud/${id}`, { method: 'POST' })
+            .then(response => response.text())
+            .then(html => {
+                // Mostrar modal con detalles
+                document.getElementById('detalleContenido').innerHTML = html;
+                document.getElementById('detalleModal').style.display = 'block';
+            });
+    }
 
+    function aprobarSolicitud(id) {
+        fetch(`/aprobar/${id}`, { method: 'POST' })
+            .then(response => {
+                // Recargar lista de solicitudes
+                location.reload();
+            });
+    }
+
+    function rechazarSolicitud(id) {
+        fetch(`/rechazar/${id}`, { method: 'POST' })
+            .then(response => {
+                // Recargar lista de solicitudes
+                location.reload();
+            });
+    }
+
+    function cerrarModal() {
+        document.getElementById('detalleModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>

@@ -51,8 +51,8 @@ public class SolicitudTarjeta {
     private Double gastosMensuales;
 
     @Column(nullable = false)
-    private String documentoIdentidad; // Ruta o nombre del archivo PDF
+    private String documentoIdentidad;
 
     @Column(nullable = false)
-    private String estado = "Pendiente"; // Estado inicial de la solicitud
+    private String estado;
 }
